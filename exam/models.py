@@ -16,25 +16,6 @@ class User(AbstractUser):
         return self.username
     
 
-# Question model
-# class Question(models.Model):
-#     QUESTION_TYPES = [('mcq', 'Multiple Choice'), ('text', 'Text Answer')]
-#     CATEGORY_CHOICES = [('math', 'Math'), ('science', 'Science'),('geography','Geography'),('testing','Testing')]
-#     DIFFICULTY_CHOICES = [('easy', 'Easy'), ('medium', 'Medium'), ('hard', 'Hard')]
-
-#     question_text = models.TextField()
-#     question_type = models.CharField(max_length=20, choices=QUESTION_TYPES)
-#     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
-#     difficulty_level = models.CharField(max_length=20, choices=DIFFICULTY_CHOICES)
-#     image = models.ImageField(upload_to='images/', blank=True, null=True)
-#     video = models.FileField(upload_to='videos/', blank=True, null=True)
-#     audio = models.FileField(upload_to='audio/', blank=True, null=True)
-#     created_by = models.ForeignKey(User, on_delete=models.CASCADE,blank=True, null=True)
-
-# class Choice(models.Model):
-#     question = models.ForeignKey(Question, related_name='choices', on_delete=models.CASCADE)
-#     choice_text = models.CharField(max_length=255)
-#     is_correct = models.BooleanField(default=False)
 
 class Question(models.Model):
     QUESTION_TYPES = [('mcq', 'Multiple Choice'), ('text', 'Text Answer')]
