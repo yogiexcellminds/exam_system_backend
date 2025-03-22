@@ -5,6 +5,8 @@ logger = logging.getLogger(__name__)
 from djoser.serializers import TokenCreateSerializer
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth import authenticate
 
 # class CustomTokenCreateSerializer(TokenCreateSerializer):
 #     user_id = serializers.IntegerField(source="user.id", read_only=True)
@@ -213,3 +215,33 @@ class AssignedQuestionPaperSerializer(serializers.ModelSerializer):
     class Meta:
         model = AssignedQuestionPaper
         fields = ['id', 'question_paper', 'question_paper_title', 'user', 'username', 'start_date', 'end_date', 'is_completed']
+
+class RegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, validators=[validate_password])
+    password2 = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password', 'password2', 'role')
+
+    def validate(self, attrs):
+        if attrs['password'] != attrs['password2']:
+            raise serializers.ValidationError({"password": "Passwords do not match."})
+        return attrs
+
+    def create(self, validated_data):
+        validated_data.pop('password2')
+        user = User.objects.create_user(**validated_data)
+        user.is_active = False  # wait until email verified
+        user.save()
+        return user
+
+class EmailVerificationSerializer(serializers.Serializer):
+    token = serializers.CharField()
+
+class ForgotPasswordSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+class ResetPasswordSerializer(serializers.Serializer):
+    token = serializers.CharField()
+    new_password = serializers.CharField()

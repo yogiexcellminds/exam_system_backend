@@ -14,6 +14,8 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+from .register_view import *
+
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'questions', QuestionViewSet)
@@ -42,7 +44,10 @@ urlpatterns = [
     path('filter-questions/', FilterQuestionsAPI.as_view(), name='filter_questions_api'),
     path('check-answers/', CheckAnswersAPIView.as_view(), name='check-answers'),
     path('list-all-apis/', ListAllAPIsView.as_view(), name='list_all_apis'),
-
+    path('register/', RegisterView.as_view(), name='register'),
+    path('verify-email/', VerifyEmail.as_view(), name='verify-email'),
+    path('forgot-password/', ForgotPasswordView.as_view(), name='forgot-password'),
+    path('reset-password/', ResetPasswordView.as_view(), name='reset-password'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
